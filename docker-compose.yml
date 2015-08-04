@@ -1,0 +1,29 @@
+sensu:
+  build: ./sensu
+  environment:
+    RABBITMQ_HOST: rabbitmq
+    REDIS_HOST: redis
+  ports:
+    - "5000:5000"
+    - "4567"
+  links:
+    - rabbitmq
+    - redis
+
+rabbitmqagent:
+  build: ./rabbit-agent
+  links:
+    - rabbitmq
+
+rabbitmq:
+  build: ./rabbitmq
+  hostname: rabbitmq
+  ports:
+    - "5672"
+    - "5671"
+    - "15672"
+
+redis:
+  image: redis:2.8.19
+  ports:
+    - "6379"
