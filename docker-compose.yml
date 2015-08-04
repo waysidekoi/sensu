@@ -9,6 +9,10 @@ sensu:
   links:
     - rabbitmq
     - redis
+  labels:
+    io.vitals.service_identifier: sensu
+    io.rancher.scheduler.affinity:container_label_ne: io.vitals.service_identifier=redis
+    io.rancher.scheduler.affinity:container_label: io.vitals.service_identifier=rabbitmq
 
 rabbitmqagent:
   build: ./rabbit-agent
@@ -22,8 +26,15 @@ rabbitmq:
     - "5672"
     - "5671"
     - "15672"
+  labels:
+    io.vitals.service_identifier: rabbitmq
+    io.rancher.scheduler.affinity:container_label_ne: io.vitals.service_identifier=redis
 
 redis:
   image: redis:2.8.19
   ports:
     - "6379"
+  labels:
+    io.vitals.service_identifier: redis
+    io.rancher.scheduler.affinity:container_label_ne: io.vitals.service_identifier=rabbitmq
+
